@@ -5,10 +5,12 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
-    push: false
+#  local:
+#    push: false
+  googleCloudBuild:
+    projectId: rupnet-ticketing
   artifacts:
-    - image: savan25/rupnet_event_booking_auth
+    - image: us.gcr.io/rupnet-ticketing/rupnet_event_booking_auth
       context: auth
       docker:
         dockerfile: Dockerfile

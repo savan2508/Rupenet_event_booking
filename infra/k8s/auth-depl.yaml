@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: savan25/rupnet_event_booking_auth
+          image: us.gcr.io/rupnet-ticketing/rupnet_event_booking_auth
 ---
 apiVersion: v1
 kind: Service
