@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: us.gcr.io/rupnet-ticketing/rupnet_event_booking_auth
+          image: savan25/rupnet-ticketing/rupnet_event_booking_auth
           env:
             - name: JWT_KEY
               valueFrom:

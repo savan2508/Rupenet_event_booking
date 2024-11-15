@@ -5,12 +5,12 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  #  local:
-  #    push: false
-  googleCloudBuild:
-    projectId: rupnet-ticketing
+  local:
+    push: false
+  #  googleCloudBuild:
+  #    projectId: rupnet-ticketing
   artifacts:
-    - image: us.gcr.io/rupnet-ticketing/rupnet_event_booking_auth
+    - image: savan25/rupnet-ticketing/rupnet_event_booking_auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -18,11 +18,22 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/rupnet-ticketing/client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx"
-            dest: .
+#    - image: savan25/rupnet-ticketing/client
+#      context: client
+#      docker:
+#        dockerfile: Dockerfile
+#      sync:
+#        manual:
+#          - src: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx"
+#            dest: .
+
+# Port forwarding configuration
+portForward:
+  - resourceType: deployment
+    resourceName: auth-mongo-depl
+    port: 27017
+    localPort: 27017
+  - resourceType: service
+    resourceName: auth-srv
+    port: 3000
+    localPort: 3000

@@ -5,6 +5,7 @@ import typescriptEslintParser from "@typescript-eslint/parser";
 import reactPlugin from "eslint-plugin-react";
 // import nodePlugin from "eslint-plugin-node";
 import prettierPlugin from "eslint-plugin-prettier";
+import eslintNext from "eslint-config-next";
 
 /** @type {import("eslint").Linter.FlatConfig[]} */
 export default [
@@ -29,6 +30,7 @@ export default [
       // node: nodePlugin,
       prettier: prettierPlugin,
       "@typescript-eslint": typescriptEslintPlugin,
+      next: eslintNext,
     },
     rules: {
       ...pluginJs.configs.recommended.rules,
@@ -36,6 +38,7 @@ export default [
       ...reactPlugin.configs.flat.recommended.rules,
       // ...nodePlugin.configs.recommended.rules,
       ...prettierPlugin.configs.recommended.rules,
+      ...eslintNext.rules,
     },
   },
 ];
