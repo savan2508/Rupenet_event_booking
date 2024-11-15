@@ -3,24 +3,33 @@
 import { useEffect, useState } from "react";
 import { useRequest } from "@/app/_hooks/useRequest";
 import { handleErrors } from "@/app/_hooks/handleErrors";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signUpErrors, setSignUpErrors] = useState(null);
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
+  const router = useRouter();
+
   const { doRequest, errors } = useRequest({
     url: "/api/users/signup",
     method: "post",
     body: { email, password },
+    onSuccess: () => {
+      router.push("/");
+    },
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const response = doRequest();
-    console.log(response);
+    const response = await doRequest();
     setSignUpErrors(errors);
   };
+
+  useEffect(() => {
+    setSignUpErrors(errors);
+  }, [errors]);
 
   useEffect(() => {
     const newErrors = [];
