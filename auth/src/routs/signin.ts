@@ -43,6 +43,7 @@ router.post(
       },
       // eslint-disable-next-line no-undef
       process.env.JWT_KEY!,
+      { expiresIn: "1h" },
     );
 
     // Store it on session object

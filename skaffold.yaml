@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta1
+apiVersion: skaffold/v2beta29
 kind: Config
 deploy:
   kubectl:
@@ -18,14 +18,24 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-#    - image: savan25/rupnet-ticketing/client
-#      context: client
-#      docker:
-#        dockerfile: Dockerfile
-#      sync:
-#        manual:
-#          - src: "**/*.ts, **/*.tsx, **/*.js, **/*.jsx"
-#            dest: .
+    - image: savan25/rupnet-ticketing/client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "**/*.ts"
+            dest: .
+          - src: "**/*.tsx"
+            dest: .
+          - src: "**/*.js"
+            dest: .
+          - src: "**/*.jsx"
+            dest: .
+          - src: "**/*.css"
+            dest: .
+          - src: "**/*.scss"
+            dest: .
 
 # Port forwarding configuration
 portForward:
@@ -33,7 +43,3 @@ portForward:
     resourceName: auth-mongo-depl
     port: 27017
     localPort: 27017
-  - resourceType: service
-    resourceName: auth-srv
-    port: 3000
-    localPort: 3000

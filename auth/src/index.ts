@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 import { app } from "./app";
+import fs from "fs";
+import https from "https";
+
+const options = {
+  key: fs.readFileSync("/app/certs/ticketing.dev-key.pem"),
+  cert: fs.readFileSync("/app/certs/ticketing.dev.pem"),
+};
 
 const start = async () => {
   // eslint-disable-next-line no-undef
@@ -14,8 +21,8 @@ const start = async () => {
     console.error(err);
   }
 
-  app.listen(3000, () => {
-    console.log("Listening on port 3000!");
+  https.createServer(options, app).listen(3000, () => {
+    console.log("HTTPS server listening on port 3000");
   });
 };
 

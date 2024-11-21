@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { handleErrors } from "@/app/_hooks/handleErrors";
+import { apiUrl } from "@/app/_apiUrl/apiUrl";
 
 export function useRequest({ url, method, body, onSuccess }) {
   const [errors, setErrors] = useState(null);
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
   const doRequest = async () => {
     try {

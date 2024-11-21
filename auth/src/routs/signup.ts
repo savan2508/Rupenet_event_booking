@@ -37,6 +37,7 @@ router.post(
       },
       // eslint-disable-next-line no-undef
       process.env.JWT_KEY!,
+      { expiresIn: "1h" },
     );
 
     req.session = {

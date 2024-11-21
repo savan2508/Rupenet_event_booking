@@ -1,32 +1,40 @@
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: client-depl
-#spec:
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      component: client
-#  template:
-#    metadata:
-#      labels:
-#        component: client
-#    spec:
-#      containers:
-#        - name: client
-#          image: savan25/rupnet-ticketing/client
-#          ports:
-#            - containerPort: 3000
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: client-srv
-#spec:
-#  selector:
-#    component: client
-#  ports:
-#    - name: client
-#      protocol: TCP
-#      port: 3000
-#      targetPort: 3000
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: client
+  template:
+    metadata:
+      labels:
+        component: client
+    spec:
+      containers:
+        - name: client
+          image: savan25/rupnet-ticketing/client
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: tls-certs
+              mountPath: /app/certs
+              readOnly: true
+      volumes:
+        - name: tls-certs
+          secret:
+            secretName: ticketing-cert-files
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector:
+    component: client
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

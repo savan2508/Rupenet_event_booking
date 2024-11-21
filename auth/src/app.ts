@@ -11,19 +11,22 @@ import { signupRouter } from "./routs/signup";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 
-const corsOptions = {
-  origin: "http://localhost:3000",
+const allowedOrigins = ["http://localhost:3000", "https://ticketing.dev"];
+
+const corsOptions: cors.CorsOptions = {
+  origin: allowedOrigins,
   credentials: true,
 };
 
 const app = express();
 app.set("trust proxy", true);
 app.use(json());
+
 app.use(
   cookieSession({
     signed: false,
-    // eslint-disable-next-line no-undef
-    secure: process.env.NODE_ENV !== "test",
+    secure: false,
+    sameSite: "none",
   }),
 );
 

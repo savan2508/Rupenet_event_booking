@@ -21,6 +21,14 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+          volumeMounts: # Mount the Secret as a volume
+            - name: pem-files
+              mountPath: /app/certs
+              readOnly: true
+      volumes:
+        - name: pem-files
+          secret:
+            secretName: ticketing-cert-files
 ---
 apiVersion: v1
 kind: Service
