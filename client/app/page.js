@@ -1,35 +1,17 @@
-"use server";
-
-import { cookies } from "next/headers";
-import { apiUrl } from "@/app/_apiUrl/apiUrl";
+import { headers } from "next/headers";
+import buildClient from "@/app/api/build-client";
 
 async function getCurrentUser() {
-  const cookie = await cookies();
+  const headersStore = await headers();
 
-  console.log("cookies", cookie);
-  const sessionCookie = cookie.getAll();
-
-  console.log("sessionCookie", sessionCookie);
-
-  const url = `${apiUrl}/api/users/currentuser`;
+  const client = buildClient(headersStore, true, "https://auth-srv:3000");
 
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      credentials: "include", // Include cookies in the request
-      headers: {
-        cookie: sessionCookie || "", // Pass the cookie if it exists
-      },
-    });
-    if (response.status === 200) {
-      const data = await response.json();
-      return data.currentUser || null; // Return the user info if available
-    }
+    const response = await client.get("/api/users/currentuser");
+    return response.data.currentUser;
   } catch (error) {
-    console.error("Error fetching current user:", error);
+    return null;
   }
-
-  return null; // Return null if the user is not authenticated or an error occurred
 }
 
 export default async function Home() {
@@ -37,11 +19,7 @@ export default async function Home() {
 
   return (
     <div>
-      {currentUser ? (
-        <h1>Welcome, {currentUser.email}!</h1> // Display user info if logged in
-      ) : (
-        <h1>Home</h1>
-      )}
+      {currentUser ? <h1>Welcome, {currentUser.email}!</h1> : <h1>Home</h1>}
     </div>
   );
 }

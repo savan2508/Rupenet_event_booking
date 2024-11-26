@@ -1,16 +1,36 @@
 import axios from "axios";
 
-const buildClient = ({ headers = {} }) => {
-  const baseUrl =
-    typeof window === "undefined"
-      ? process.env.NEXT_PUBLIC_API_BASE_URL ||
-        "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"
-      : "/";
+const buildClient = (headersEntry = {}, credential = true, url = "") => {
+  const baseUrl = typeof window === "undefined" ? url : "/";
 
-  return axios.create({
+  const client = axios.create({
     baseURL: baseUrl,
-    headers,
+    headers: headersEntry,
+    credentials: "include",
+    withCredentials: credential,
   });
+
+  client.interceptors.request.use((config) => {
+    console.log(`Making request to ${config.baseURL}${config.url}`);
+    return config;
+  });
+
+  client.interceptors.response.use(
+    (response) => {
+      console.log("Response received:", response.data);
+      return response;
+    },
+    (error) => {
+      console.log("Error in response:", {
+        message: error.message,
+        response: error.response ? error.response.data : null,
+        config: error.config,
+      });
+      return Promise.reject(error);
+    },
+  );
+
+  return client;
 };
 
 export default buildClient;

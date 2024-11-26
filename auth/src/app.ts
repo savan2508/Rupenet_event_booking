@@ -10,6 +10,7 @@ import { signoutRouter } from "./routs/signout";
 import { signupRouter } from "./routs/signup";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
+import { helloTestRouter } from "./routs/helloTest";
 
 const allowedOrigins = ["http://localhost:3000", "https://ticketing.dev"];
 
@@ -25,8 +26,8 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: false,
-    sameSite: "none",
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
   }),
 );
 
@@ -35,6 +36,8 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
+
+app.use(helloTestRouter);
 
 app.all("*", () => {
   throw new NotFoundError();
