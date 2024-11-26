@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useRequest } from "@/hooks/useRequest";
 import { handleErrors } from "@/hooks/handleErrors";
+import { useRequest } from "@/hooks/useRequest";
 
-export default function SignupPage() {
+export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [signUpErrors, setSignUpErrors] = useState(null);
+  const [signInErrors, setSignInErrors] = useState(null);
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
   const router = useRouter();
 
   const { doRequest, errors } = useRequest({
-    url: "/api/users/signup",
+    url: "/api/users/signin",
     method: "post",
     body: { email, password },
     onSuccess: () => {
@@ -24,11 +24,11 @@ export default function SignupPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const response = await doRequest();
-    setSignUpErrors(errors);
+    setSignInErrors(errors);
   };
 
   useEffect(() => {
-    setSignUpErrors(errors);
+    setSignInErrors(errors);
   }, [errors]);
 
   useEffect(() => {
@@ -42,9 +42,9 @@ export default function SignupPage() {
     }
     setSubmitButtonDisable(newErrors.length > 0);
     if (newErrors.length > 0) {
-      setSignUpErrors(handleErrors(newErrors));
+      setSignInErrors(handleErrors(newErrors));
     } else {
-      setSignUpErrors(null);
+      setSignInErrors(null);
     }
   }, [email, password]);
 
@@ -76,12 +76,12 @@ export default function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="mt-3 mb-3">{signUpErrors}</div>
+        <div className="mt-3 mb-3">{signInErrors}</div>
         <button
           disabled={submitButtonDisable}
           className="btn btn-primary mt-1 mx-auto"
         >
-          Signup
+          Signin
         </button>
       </form>
     </>

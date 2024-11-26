@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { handleErrors } from "@/app/_hooks/handleErrors";
+import { handleErrors } from "@/hooks/handleErrors.js";
 
 export function useRequest({ url, method, body, onSuccess }) {
   const [errors, setErrors] = useState(null);
